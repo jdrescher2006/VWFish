@@ -9,8 +9,8 @@ import sys
 import urllib.parse
 from urllib.parse import urlsplit
 
-CARNET_USERNAME = 'jens.drescher.lippe@gmx.de'
-CARNET_PASSWORD = 'Porsche944,.'
+CARNET_USERNAME = 'usr'
+CARNET_PASSWORD = 'pwd'
 
 HEADERS = { 'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=UTF-8',
