@@ -24,7 +24,8 @@ DISTFILES += qml/harbour-vwfish.qml \
     rpm/harbour-vwfish.yaml \
     translations/*.ts \
     harbour-vwfish.desktop \
-    qml/pages/carnet_comm.py
+    qml/pages/carnet_comm.py \
+    qml/tools/Messagebox.qml
     qml/pages/MainPage.qml
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172

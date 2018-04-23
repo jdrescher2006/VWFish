@@ -21,6 +21,8 @@ URL:        http://example.org/
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-vwfish.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
+Requires:   python3-requests
+Requires: pyotherside-qml-plugin-python3-qt5 >= 1.4
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)

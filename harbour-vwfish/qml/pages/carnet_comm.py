@@ -9,8 +9,8 @@ import sys
 import urllib.parse
 from urllib.parse import urlsplit
 
-CARNET_USERNAME = 'usr'
-CARNET_PASSWORD = 'pwd'
+CARNET_USERNAME = ''
+CARNET_PASSWORD = ''
 
 HEADERS = { 'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=UTF-8',
@@ -18,6 +18,8 @@ HEADERS = { 'Accept': 'application/json, text/plain, */*',
 
 
 def CarNetLogin(s,email, password):
+        fncReturnProgress(1, "Init...")
+
         AUTHHEADERS = { 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
                         'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0.1; D5803 Build/23.5.A.1.291; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/63.0.3239.111 Mobile Safari/537.36' }
         auth_base = "https://security.volkswagen.com"
@@ -46,6 +48,7 @@ def CarNetLogin(s,email, password):
                 return authstate_re.search(r).group(1)
 
         # Request landing page and get CSFR:
+        fncReturnProgress(2, "Request landing page and get CSFR")
         r = s.get(base + '/portal/en_GB/web/guest/home')
         if r.status_code != 200:
                 return ""
@@ -53,6 +56,7 @@ def CarNetLogin(s,email, password):
         #fncPrint(csrf)
 
         # Request login page and get CSRF
+        fncReturnProgress(3, "Request login page and get CSRF")
         AUTHHEADERS["Referer"] = base + '/portal'
         AUTHHEADERS["X-CSRF-Token"] = csrf
         r = s.post(base + '/portal/web/guest/home/-/csrftokenhandling/get-login-url',headers=AUTHHEADERS)
@@ -64,6 +68,7 @@ def CarNetLogin(s,email, password):
         #fncPrint("lg_url: " + lg_url)
 
         # no redirect so we can get values we look for
+        fncReturnProgress(4, "no redirect so we can get values we look for")
         r = s.get(lg_url, allow_redirects=False, headers=AUTHHEADERS)
         if r.status_code != 302:
             return ""
@@ -71,6 +76,7 @@ def CarNetLogin(s,email, password):
         #fncPrint("ref_url: " + ref_url)
 
         # now get actual login page and get session id and ViewState
+        fncReturnProgress(5, "now get actual login page and get session id and ViewState")
         r = s.get(ref_url, headers=AUTHHEADERS)
         if r.status_code != 200:
             return ""
@@ -78,6 +84,7 @@ def CarNetLogin(s,email, password):
         #fncPrint("view_state: " + view_state)
 
         # Login with user details
+        fncReturnProgress(6, "Login with user details")
         AUTHHEADERS["Faces-Request"] = "partial/ajax"
         AUTHHEADERS["Referer"] = ref_url
         AUTHHEADERS["X-CSRF-Token"] = ''
@@ -102,6 +109,7 @@ def CarNetLogin(s,email, password):
         #fncPrint("ref_url: " + ref_url)
 
         # redirect to link from login and extract state and code values
+        fncReturnProgress(7, "redirect to link from login")
         r = s.get(ref_url, allow_redirects=False, headers=AUTHHEADERS)
         if r.status_code != 302:
                 return ""
@@ -111,10 +119,13 @@ def CarNetLogin(s,email, password):
         code = extract_code(ref_url2)
         state = extract_state(ref_url2)
         # load ref page
+        fncReturnProgress(8, "load ref page")
         r = s.get(ref_url2, headers=AUTHHEADERS)
         if r.status_code != 200:
             return ""
 
+        #get location
+        fncReturnProgress(9, "get location")
         AUTHHEADERS["Faces-Request"] = ""
         AUTHHEADERS["Referer"] = ref_url2
         post_data = {
@@ -124,6 +135,9 @@ def CarNetLogin(s,email, password):
         r = s.post(base + urlsplit(ref_url2).path + '?p_auth=' + state + '&p_p_id=33_WAR_cored5portlet&p_p_lifecycle=1&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_33_WAR_cored5portlet_javax.portlet.action=getLoginStatus', data=post_data, allow_redirects=False, headers=AUTHHEADERS)
         if r.status_code != 302:
             return ""
+
+        #load second ref page
+        fncReturnProgress(10, "load second ref page")
         ref_url3 = r.headers.get("location")
         #fncPrint("ref_url3: " + ref_url3)
         r = s.get(ref_url3, headers=AUTHHEADERS)
@@ -133,6 +147,9 @@ def CarNetLogin(s,email, password):
         # Update headers for requests
         HEADERS["Referer"] = ref_url3
         HEADERS["X-CSRF-Token"] = csrf
+
+        fncReturnProgress(0, "")
+
         return ref_url3
 
 
@@ -147,16 +164,14 @@ def CarNetPostAction(s,url_base,command,data):
         return r.content
 
 def retrieveCarNetInfo(s,url_base):
-        fncPrint(CarNetPost(s,url_base, '/-/msgc/get-new-messages'))
-        fncPrint(CarNetPost(s,url_base, '/-/vsr/request-vsr'))
-        fncPrint(CarNetPost(s,url_base, '/-/vsr/get-vsr'))
-        fncPrint(CarNetPost(s,url_base, '/-/cf/get-location'))
-        fncPrint(CarNetPost(s,url_base, '/-/vehicle-info/get-vehicle-details'))
-        fncPrint(CarNetPost(s,url_base, '/-/emanager/get-emanager'))
-        return 0
-
-def retrieveGETVSR(s,url_base):
-        fncReturnJSON(CarNetPost(s,url_base, '/-/vsr/get-vsr'))
+        fncReturnJSON(CarNetPost(s,url_base, '/-/msgc/get-new-messages'), 'get-new-messages')
+        #fncReturnJSON(CarNetPost(s,url_base, '/-/vsr/request-vsr'), 'request-vsr')
+        fncReturnJSON(CarNetPost(s,url_base, '/-/vsr/get-vsr'), 'get-vsr')
+        fncReturnJSON(CarNetPost(s,url_base, '/-/cf/get-location'), 'get-location')
+        fncReturnJSON(CarNetPost(s,url_base, '/-/vehicle-info/get-vehicle-details'), 'get-vehicle-details')
+        fncReturnJSON(CarNetPost(s,url_base, '/-/emanager/get-emanager'), 'get-emanager')
+        fncReturnJSON(CarNetPost(s,url_base, '/-/mainnavigation/get-fully-loaded-cars'), 'get-fully-loaded-cars')
+        fncReturnJSON(CarNetPost(s,url_base, '/-/rts/get-last-refuel-trip-statistics'), 'get-last-refuel-trip-statistics')
         return 0
 
 def startCharge(s,url_base):
@@ -205,8 +220,15 @@ def stopWindowMelt(s,url_base):
         fncPrint(CarNetPostAction(s,url_base, '/-/emanager/trigger-windowheating', post_data))
         return 0
 
+def getCarDataUpdate(s,url_base):
+        fncReturnJSON(CarNetPost(s,url_base, '/-/vsr/request-vsr'), 'request-vsr')
+        return 0
 
-def fncCarNet(sCommand):
+
+def fncCarNet(sCommand, sUsername, sPassword):
+    CARNET_USERNAME = sUsername
+    CARNET_PASSWORD = sPassword
+
     s = requests.Session()
     url = CarNetLogin(s,CARNET_USERNAME,CARNET_PASSWORD)
     if url == '':
@@ -215,8 +237,8 @@ def fncCarNet(sCommand):
 
     if(sCommand == "retrieveCarNetInfo"):
         retrieveCarNetInfo(s,url)
-    elif(sCommand == "retrieveGETVSR"):
-        retrieveGETVSR(s,url)
+    elif(sCommand == "getCarDataUpdate"):
+        getCarDataUpdate(s,url)
     else:
         if(sCommand == "startCharge"):
             startCharge(s,url)
@@ -229,7 +251,7 @@ def fncCarNet(sCommand):
         elif(sCommand == "startWindowMelt"):
             startWindowMelt(s,url)
         elif(sCommand == "stopWindowMelt"):
-            stopWindowMelt(s,url)
+            stopWindowMelt(s,url)        
         # Below is the flow the web app is using to determine when action really started
         # You should look at the notifications until it returns a status JSON like this
         # {"errorCode":"0","actionNotificationList":[{"actionState":"SUCCEEDED","actionType":"STOP","serviceType":"RBC","errorTitle":null,"errorMessage":null}]}
@@ -241,5 +263,8 @@ def fncCarNet(sCommand):
 def fncPrint(sMessageText):
     pyotherside.send('PrintMessageText', sMessageText)
 
-def fncReturnJSON(sJSonData):
-    pyotherside.send('ReturnJSON', sJSonData)
+def fncReturnJSON(sJSonData, sCommand):
+    pyotherside.send('ReturnJSON', sJSonData, sCommand)
+
+def fncReturnProgress(progressStep, sProgressText):
+    pyotherside.send('ReturnProgress', progressStep, sProgressText)
