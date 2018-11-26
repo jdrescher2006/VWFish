@@ -10,6 +10,10 @@ Page {
     property string sLoginText: ""
     property bool bLockOnCompleted : false
     property bool bLockFirstPageLoad: true
+    property bool bHaveFirstData: false
+
+    //Car status variables
+    property int iClimaStatus: -1
 
     onStatusChanged:
     {
@@ -48,10 +52,50 @@ Page {
             }
             MenuItem
             {
+                text: qsTr("Start Climatisation")
+                onClicked:
+                {
+                    python.fncCarNet("startClimat", settingsConf.user,settingsConf.password);
+                }
+            }
+            MenuItem
+            {
+                text: qsTr("Stop Climatisation")
+                onClicked:
+                {
+                    python.fncCarNet("stopClimat", settingsConf.user,settingsConf.password);
+                }
+            }
+            MenuItem
+            {
+                text: qsTr("Start Windowmelt")
+                onClicked:
+                {
+                    python.fncCarNet("startWindowMelt", settingsConf.user,settingsConf.password);
+                }
+            }
+            MenuItem
+            {
+                text: qsTr("Stop Windowmelt")
+                onClicked:
+                {
+                    python.fncCarNet("stopWindowMelt", settingsConf.user,settingsConf.password);
+                }
+            }
+            MenuItem
+            {
                 text: qsTr("Request car info")
                 onClicked:
                 {
                     python.fncCarNet("getCarDataUpdate", settingsConf.user,settingsConf.password);
+                }
+            }
+            MenuItem
+            {
+                text: qsTr("CarNet get Info")
+                onClicked:
+                {
+                    python.fncCarNet("retrieveCarNetInfo", settingsConf.user,settingsConf.password);
                 }
             }
         }
@@ -69,35 +113,47 @@ Page {
             {
                 width: parent.width
                 height: Theme.paddingLarge
-            }
-            Button
-            {
-                text: "CarNet get Info"
-                width: parent.width
-                onClicked:
-                {
-                    python.fncCarNet("retrieveCarNetInfo", settingsConf.user,settingsConf.password);
-                }
-            }
+            }                    
+            SectionHeader { text: "Car data"; visible: bHaveFirstData }
             Label
             {
                 id: idLBLCarInfo
+                x: Theme.paddingLarge
             }
             Label
             {
                 id: idLBLLastDateUpdate
+                x: Theme.paddingLarge
             }
+            SectionHeader { text: "Battery status"; visible: bHaveFirstData }
             Label
             {
                 id: idLBLBatteryStatus
+                x: Theme.paddingLarge
             }
+            SectionHeader { text: "Charge status"; visible: bHaveFirstData }
             Label
             {
                 id: idLBLChargeStatus
+                x: Theme.paddingLarge
             }
+            SectionHeader { text: "Clima status"; visible: bHaveFirstData }
+            Label
+            {
+                id: idLBLClimaStatus
+                x: Theme.paddingLarge
+            }
+            SectionHeader { text: "Lock status"; visible: bHaveFirstData }
             Label
             {
                 id: idLBLLockStatus
+                x: Theme.paddingLarge
+            }
+            Separator
+            {
+                visible: iLoginStep > 0
+                color: Theme.highlightColor
+                width: parent.width
             }
             ProgressBar
             {
@@ -116,7 +172,8 @@ Page {
     {
         id: python
 
-        Component.onCompleted: {
+        Component.onCompleted:
+        {
             addImportPath(Qt.resolvedUrl('.'));           
 
             setHandler('PrintMessageText', function(sMessageText)
@@ -132,13 +189,15 @@ Page {
             });
 
             setHandler('ReturnJSON', function(sJSONText, sCommand)
-            {
+            {                
                 var json=JSON.parse(sJSONText);
 
                 console.log("Command: " + sCommand + ", Data: " + sJSONText)
 
                 if (sCommand === "get-vsr")
                 {
+                    bHaveFirstData = true;
+
                     idLBLBatteryStatus.text = "Battery: " + json.vehicleStatusData.batteryLevel + "%, Range: " + json.vehicleStatusData.batteryRange + "km"
                     idLBLLockStatus.text = "Left front: " + json.vehicleStatusData.lockData.left_front +
                             ", right front: " + json.vehicleStatusData.lockData.right_front + "\r\n" +
@@ -155,15 +214,36 @@ Page {
                 }
                 if (sCommand === "get-vehicle-details")
                 {
-                       idLBLLastDateUpdate.text = "Last car infos: " + json.vehicleDetails.lastConnectionTimeStamp.toString();
+                       idLBLLastDateUpdate.text = "Last car infos: " + json.vehicleDetails.lastConnectionTimeStamp[0].toString() + " " + json.vehicleDetails.lastConnectionTimeStamp[1].toString();
                 }
                 if (sCommand === "get-emanager")
                 {
-                       idLBLChargeStatus.text = "hours: " + json.EManager.rbc.status.chargingRemaningHour + ", minutes: " + json.EManager.rbc.status.chargingRemaningMinute
+                    var bIsCharging = !(json.EManager.rbc.status.chargingState === "OFF");
+
+                    if (bIsCharging)
+                    {
+                        var iHours =  parseInt(json.EManager.rbc.status.chargingRemaningHour);
+                        var iMinutes = parseInt(json.EManager.rbc.status.chargingRemaningMinute);
+
+                        idLBLChargeStatus.text = iHours === 0 ? qsTr("Remaining time: ") + iMinutes.toString() + " minutes" : qsTr("Remaining time: ") + iHours.toString() + " hours and " + iMinutes.toString() + " minutes";
+
+                        var currentTime = new Date();
+                        currentTime.setHours(currentTime.getHours() + iHours, currentTime.getMinutes() + iMinutes);
+
+                        idLBLChargeStatus.text = idLBLChargeStatus.text + "\r\n" + qsTr("Charge end: ") + currentTime.getDate().toString() + "." + (currentTime.getMonth() + 1).toString() + "." + currentTime.getFullYear().toString() + " " + fncPadZeros(currentTime.getHours(), 2).toString() + ":" + fncPadZeros(currentTime.getMinutes(),2).toString();
+                    }
+                    else
+                    {
+                        idLBLChargeStatus.text = qsTr("Not charging");
+                    }
+
+                    //Clima
+                    iClimaStatus = !(json.EManager.rpc.status.climatisationState === "OFF") ? 1 : 0;
+                    idLBLClimaStatus.text = (iClimaStatus === 0) ? qsTr("OFF") : qsTr("ON");
                 }
                 if (sCommand === "get-fully-loaded-cars")
                 {
-                    idLBLCarInfo.text = json.fullyLoadedVehiclesResponse.vehiclesNotFullyLoaded[0].name + " " + json.fullyLoadedVehiclesResponse.vehiclesNotFullyLoaded[0].vin;
+                    idLBLCarInfo.text = "VW " + json.fullyLoadedVehiclesResponse.vehiclesNotFullyLoaded[0].name + " " + json.fullyLoadedVehiclesResponse.vehiclesNotFullyLoaded[0].vin;
                 }
                 if (sCommand === "request-vsr")
                 {
@@ -198,6 +278,13 @@ Page {
             // asychronous messages from Python arrive here
             // in Python, this can be accomplished via pyotherside.send()
             console.log('got message from python: ' + data);
+        }
+
+        function fncPadZeros(number, size)
+        {
+          number = number.toString();
+          while (number.length < size) number = "0" + number;
+          return number;
         }
     }
 }
