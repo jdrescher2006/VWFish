@@ -7,6 +7,10 @@ import "tools"
 
 ApplicationWindow
 {
+    property bool bGlobalLogin: false
+    property string sGlobalVarLoginURL: ""
+    property var oGlobalSessionObject
+
 
     function fncShowMessage(iType ,sMessage, iTime)
     {

@@ -1,6 +1,6 @@
 Name: harbour-vwfish
 Summary: Sailfish OS Application for connecting with Volkswagen Car Net service
-Version: 0.2
+Version: 0.3
 Release: 1
 # The contents of the Group field should be one of the groups listed here:
 # https://github.com/mer-tools/spectacle/blob/master/data/GROUPS

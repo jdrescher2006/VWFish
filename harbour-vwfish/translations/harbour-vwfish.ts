@@ -11,10 +11,6 @@
 <context>
     <name>MainPage</name>
     <message>
-        <source>Request successful!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>VW Car Net Remote</source>
         <translation type="unfinished"></translation>
     </message>
@@ -47,14 +43,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Request car info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CarNet get Info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>OFF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -68,6 +56,38 @@
     </message>
     <message>
         <source>Stop Windowmelt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Get car data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Get car full request</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Login...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Get car data successful!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Car request successful!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logged in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logged off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Requesting server...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

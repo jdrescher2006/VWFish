@@ -9,15 +9,14 @@ import sys
 import urllib.parse
 from urllib.parse import urlsplit
 
-CARNET_USERNAME = ''
-CARNET_PASSWORD = ''
-
 HEADERS = { 'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=UTF-8',
                         'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0.1; D5803 Build/23.5.A.1.291; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/63.0.3239.111 Mobile Safari/537.36' }
 
 
-def CarNetLogin(s,email, password):
+def fncCarNetLogin(username,password):
+        s = requests.Session()
+
         fncReturnProgress(1, "Init...")
 
         AUTHHEADERS = { 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
@@ -91,7 +90,7 @@ def CarNetLogin(s,email, password):
 
         post_data = {
                 'loginForm': 'loginForm',
-                'loginForm:email': email,
+                'loginForm:email': username,
                 'loginForm:password': password,
                 'loginForm:j_idt19': '',
                 'javax.faces.ViewState': view_state,
@@ -150,7 +149,8 @@ def CarNetLogin(s,email, password):
 
         fncReturnProgress(0, "")
 
-        return ref_url3
+        fncReturnLoginURL(ref_url3, s)
+        #return ref_url3
 
 
 def CarNetPost(s,url_base,command):
@@ -225,12 +225,15 @@ def getCarDataUpdate(s,url_base):
         return 0
 
 
-def fncCarNet(sCommand, sUsername, sPassword):
-    CARNET_USERNAME = sUsername
-    CARNET_PASSWORD = sPassword
+def fncCarNet(sCommand, url, sessionObject):
+    s = sessionObject
 
-    s = requests.Session()
-    url = CarNetLogin(s,CARNET_USERNAME,CARNET_PASSWORD)
+    #fncPrint("request.Session s: " + s)
+
+    #url = CarNetLogin(s,CARNET_USERNAME,CARNET_PASSWORD)
+
+    #fncPrint("CarNetLogin url: " + url)
+
     if url == '':
         fncPrint("Failed to login")
         return 0
@@ -268,3 +271,6 @@ def fncReturnJSON(sJSonData, sCommand):
 
 def fncReturnProgress(progressStep, sProgressText):
     pyotherside.send('ReturnProgress', progressStep, sProgressText)
+
+def fncReturnLoginURL(sLoginURL, oSessionObject):
+     pyotherside.send('ReturnLoginURL', sLoginURL, oSessionObject)

@@ -11,79 +11,99 @@
 <context>
     <name>MainPage</name>
     <message>
-        <source>Request successful!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>VW Car Net Remote</source>
-        <translation type="unfinished"></translation>
+        <translation>VW Car Net Remote</translation>
     </message>
     <message>
         <source>of</source>
-        <translation type="unfinished"></translation>
+        <translation>von</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <source>Not charging</source>
-        <translation type="unfinished"></translation>
+        <translation>Lade nicht</translation>
     </message>
     <message>
         <source>Remaining time: </source>
-        <translation type="unfinished"></translation>
+        <translation>Verbleibende Zeit: </translation>
     </message>
     <message>
         <source>Charge end: </source>
-        <translation type="unfinished"></translation>
+        <translation>Ladeende: </translation>
     </message>
     <message>
         <source>Start Climatisation</source>
-        <translation type="unfinished"></translation>
+        <translation>Klimatisieren</translation>
     </message>
     <message>
         <source>Stop Climatisation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Request car info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CarNet get Info</source>
-        <translation type="unfinished"></translation>
+        <translation>Stop Klimatisieren</translation>
     </message>
     <message>
         <source>OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>AUS</translation>
     </message>
     <message>
         <source>ON</source>
-        <translation type="unfinished"></translation>
+        <translation>AN</translation>
     </message>
     <message>
         <source>Start Windowmelt</source>
-        <translation type="unfinished"></translation>
+        <translation>Fensterheizung</translation>
     </message>
     <message>
         <source>Stop Windowmelt</source>
-        <translation type="unfinished"></translation>
+        <translation>Stop Fensterheizung</translation>
+    </message>
+    <message>
+        <source>Get car data</source>
+        <translation>Server-Daten anfordern</translation>
+    </message>
+    <message>
+        <source>Get car full request</source>
+        <translation>Auto-Daten anfordern</translation>
+    </message>
+    <message>
+        <source>Login...</source>
+        <translation>Anmelden...</translation>
+    </message>
+    <message>
+        <source>Get car data successful!</source>
+        <translation>Auto-Daten erfolgreich geholt!</translation>
+    </message>
+    <message>
+        <source>Car request successful!</source>
+        <translation>Server-Daten erfolgreich geholt</translation>
+    </message>
+    <message>
+        <source>Logged in</source>
+        <translation>Angemeldet</translation>
+    </message>
+    <message>
+        <source>Logged off</source>
+        <translation>Abgemeldet</translation>
+    </message>
+    <message>
+        <source>Requesting server...</source>
+        <translation>Server anfragen...</translation>
     </message>
 </context>
 <context>
     <name>Settings</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Username</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Passwort</translation>
     </message>
 </context>
 </TS>
