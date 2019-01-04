@@ -179,7 +179,7 @@ def startCharge(s,url_base):
                 'triggerAction': True,
                 'batteryPercent': '100'
         }
-        fncPrint(CarNetPostAction(s,url_base, '/-/emanager/charge-battery', post_data))
+        fncReturnJSON(CarNetPostAction(s,url_base, '/-/emanager/charge-battery', post_data), 'charge-battery-start')
         return 0
 
 def stopCharge(s,url_base):
@@ -187,7 +187,7 @@ def stopCharge(s,url_base):
                 'triggerAction': False,
                 'batteryPercent': '99'
         }
-        fncPrint(CarNetPostAction(s,url_base, '/-/emanager/charge-battery', post_data))
+        fncReturnJSON(CarNetPostAction(s,url_base, '/-/emanager/charge-battery', post_data), 'charge-battery-stop')
         return 0
 
 def startClimat(s,url_base):
@@ -195,7 +195,7 @@ def startClimat(s,url_base):
                 'triggerAction': True,
                 'electricClima': True
         }
-        fncPrint(CarNetPostAction(s,url_base, '/-/emanager/trigger-climatisation', post_data))
+        fncReturnJSON(CarNetPostAction(s,url_base, '/-/emanager/trigger-climatisation', post_data), 'trigger-climatisation-start')
         return 0
 
 def stopClimat(s,url_base):
@@ -203,21 +203,21 @@ def stopClimat(s,url_base):
                 'triggerAction': False,
                 'electricClima': True
         }
-        fncPrint(CarNetPostAction(s,url_base, '/-/emanager/trigger-climatisation', post_data))
+        fncReturnJSON(CarNetPostAction(s,url_base, '/-/emanager/trigger-climatisation', post_data), 'trigger-climatisation-stop')
         return 0
 
 def startWindowMelt(s,url_base):
         post_data = {
                 'triggerAction': True
         }
-        fncPrint(CarNetPostAction(s,url_base, '/-/emanager/trigger-windowheating', post_data))
+        fncReturnJSON(CarNetPostAction(s,url_base, '/-/emanager/trigger-windowheating', post_data), 'trigger-windowheating-start')
         return 0
 
 def stopWindowMelt(s,url_base):
         post_data = {
                 'triggerAction': False
         }
-        fncPrint(CarNetPostAction(s,url_base, '/-/emanager/trigger-windowheating', post_data))
+        fncReturnJSON(CarNetPostAction(s,url_base, '/-/emanager/trigger-windowheating', post_data), 'trigger-windowheating-stop')
         return 0
 
 def getCarDataUpdate(s,url_base):

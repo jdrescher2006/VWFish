@@ -439,7 +439,11 @@ Page
 
                     //Clima
                     iClimaStatus = !(json.EManager.rpc.status.climatisationState === "OFF") ? 1 : 0;
-                    idLBLClimaStatus.text = (iClimaStatus === 0) ? qsTr("OFF") : qsTr("ON");
+                    var iClimatisationRemaningTime = json.EManager.rpc.status.climatisationRemaningTime;
+                    var iWindowHeatingStateFront = !(json.EManager.rpc.status.windowHeatingStateFront === "OFF") ? 1 : 0;
+
+                    idLBLClimaStatus.text = qsTr("Climatisation: ") + ((iClimaStatus === 0) ? qsTr("OFF") : qsTr("ON")) + qsTr(", remaining time: ") + iClimatisationRemaningTime;
+                    idLBLClimaStatus.text = idLBLClimaStatus.text + "\r\n" + qsTr("Front window heating: ") + ((iWindowHeatingStateFront === 0) ? qsTr("OFF") : qsTr("ON"));
                 }
                 if (sCommand === "get-fully-loaded-cars")
                 {
@@ -454,7 +458,75 @@ Page
                     }
                     else
                     {
-                        fncShowMessage(3,qsTr("Request error: " + sErrorCode), 2000);
+                        fncShowMessage(3,qsTr("Request error: " + sErrorCode), 6000);
+                    }
+                }
+                if (sCommand === "trigger-climatisation-start")
+                {
+                    if (json.errorCode === "0" && json.actionNotification.actionType === "START_CLIMATISATION" && json.actionNotification.errorMessage === null)
+                    {
+                        fncShowMessage(2,qsTr("Climatisation started!"), 2000);
+                    }
+                    else
+                    {
+                        fncShowMessage(3,qsTr("Request error! Error code: " + json.errorCode + "\r\nerror title: " + json.actionNotification.errorTitle + "\r\nerror message: " + json.actionNotification.errorMessage), 20000);
+                    }
+                }
+                if (sCommand === "trigger-climatisation-stop")
+                {
+                    if (json.errorCode === "0" && json.actionNotification.actionType === "STOP_CLIMATISATION" && json.actionNotification.errorMessage === null)
+                    {
+                        fncShowMessage(2,qsTr("Climatisation stopped!"), 2000);
+                    }
+                    else
+                    {
+                        fncShowMessage(3,qsTr("Request error! Error code: " + json.errorCode + "\r\nerror title: " + json.actionNotification.errorTitle + "\r\nerror message: " + json.actionNotification.errorMessage), 20000);
+                    }
+                }
+
+                if (sCommand === "trigger-windowheating-start")
+                {
+                    if (json.errorCode === "0" && json.actionNotification.actionType === "START_CLIMATISATION" && json.actionNotification.errorMessage === null)
+                    {
+                        fncShowMessage(2,qsTr("Window heating started!"), 2000);
+                    }
+                    else
+                    {
+                        fncShowMessage(3,qsTr("Request error! Error code: " + json.errorCode + "\r\nerror title: " + json.actionNotification.errorTitle + "\r\nerror message: " + json.actionNotification.errorMessage), 20000);
+                    }
+                }
+                if (sCommand === "trigger-windowheating-stop")
+                {
+                    if (json.errorCode === "0" && json.actionNotification.actionType === "STOP_CLIMATISATION" && json.actionNotification.errorMessage === null)
+                    {
+                        fncShowMessage(2,qsTr("Window heating stopped!"), 2000);
+                    }
+                    else
+                    {
+                        fncShowMessage(3,qsTr("Request error! Error code: " + json.errorCode + "\r\nerror title: " + json.actionNotification.errorTitle + "\r\nerror message: " + json.actionNotification.errorMessage), 20000);
+                    }
+                }
+
+                if (sCommand === "charge-battery-start")
+                {
+                    if (json.errorCode === "0" && json.actionNotification.actionType === "START_CLIMATISATION" && json.actionNotification.errorMessage === null)
+                    {
+                        fncShowMessage(2,qsTr("Charging battery started!"), 2000);
+                    }
+                    else
+                    {
+                        fncShowMessage(3,qsTr("Request error! Error code: " + json.errorCode + "\r\nerror title: " + json.actionNotification.errorTitle + "\r\nerror message: " + json.actionNotification.errorMessage), 20000);
+                    }
+                }
+                if (sCommand === "charge-battery-stop")
+                {
+                    if (json.errorCode === "0" && json.actionNotification.actionType === "STOP_CLIMATISATION" && json.actionNotification.errorMessage === null)
+                    {
+                        fncShowMessage(2,qsTr("Charging battery stopped!"), 2000);
+                    }
+                    else
+                    {
+                        fncShowMessage(3,qsTr("Request error! Error code: " + json.errorCode + "\r\nerror title: " + json.actionNotification.errorTitle + "\r\nerror message: " + json.actionNotification.errorMessage), 20000);
                     }
                 }
             });

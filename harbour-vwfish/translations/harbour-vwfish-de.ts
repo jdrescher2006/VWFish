@@ -90,6 +90,42 @@
         <source>Requesting server...</source>
         <translation>Server anfragen...</translation>
     </message>
+    <message>
+        <source>Climatisation: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>, remaining time: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Front window heating: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Climatisation started!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Climatisation stopped!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Window heating started!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Window heating stopped!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Charging battery started!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Charging battery stopped!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Settings</name>
